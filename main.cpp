@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include <matrix.hpp>
-#include <quaternion.hpp>
+#include <lambda>
 
 int main()
 {
@@ -14,6 +13,12 @@ int main()
          5, 6, 7, 8, 9,
          6, 7, 8, 9, 10,
          7, 8, 9, 10, 11);
+
+    auto reduced = lambda::rref(v);
+    std::cout << "v: " << v << std::endl;
+    std::cout << "rref(v): " << reduced << std::endl;
+
+    /* matrix, vector, quaternion tests
 
     lambda::vector<3> x(1.1, 2, 4.5);
     lambda::vector<3, int> y(-3, 1, 7);
@@ -54,9 +59,19 @@ int main()
         << lambda::det(C) << std::endl;
 
     lambda::quaternion<> q(1, 2, 3, 4);
-    std::cout << q << std::endl;
-    std::cout << q.vec() << std::endl;
-    std::cout << q.scalar() << std::endl;
+    std::cout << "q: " << q << std::endl;
+    std::cout << "q vector: " << q.vec() << std::endl;
+    std::cout << "q scalar: " << q.scalar() << std::endl;
+
+    lambda::vector<3> k(4, -3, 5);
+    std::cout << "k: " << k << std::endl;
+    std::cout << "norm(k): " << lambda::euclidean_norm(k) << std::endl;
+    std::cout << "norm(transpose(k)): "
+        << lambda::euclidean_norm(lambda::transpose(k)) << std::endl;
+
+    std::cout << lambda::identity<4>() << std::endl;
+
+    */
 
     return 0;
 }

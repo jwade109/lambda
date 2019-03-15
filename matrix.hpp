@@ -76,6 +76,16 @@ using vector = column_vector<N, T>;
 const static vector<3, uint8_t>
     unitx(1, 0, 0), unity(0, 1, 0), unitz(0, 0, 1);
 
+template <size_t N, class T = double> matrix<N, N, T> identity()
+{
+    matrix<N, N, T> ret;
+    for (int i = 0; i < N; ++i)
+    {
+        ret(i, i) = 1;
+    }
+    return ret;
+}
+
 template <size_t M, size_t N, class T>
 std::ostream& operator << (std::ostream &os, const matrix<M, N, T> &m)
 {
@@ -207,16 +217,31 @@ template <class T> T det(const matrix<2, 2, T> &m)
     return m(0,0)*m(1,1) - m(0,1)*m(1,0); 
 }
 
-template <size_t N, class T1, class T2>
-auto inner_product(const vector<N, T1> &left,
-                   const vector<N, T2> &right)
+template <class T> T det(const matrix<1, 1, T> &m)
+{
+    return m(0,0);
+}
+
+template <size_t N, class T> T trace(const matrix<N, N, T> &m)
+{
+    T sum();
+    for (size_t i = 0; i < N; ++i)
+    {
+        sum += m(i, i);
+    }
+    return sum;
+}
+
+template <size_t M, size_t N, class T1, class T2>
+auto inner_product(const matrix<M, N, T1> &left,
+                   const matrix<M, N, T2> &right)
 -> decltype(left(0,0)*right(0,0))
 {
     using T3 = decltype(left(0,0)*right(0,0));
     T3 sum = 0;
-    for (size_t i = 0; i < N; ++i)
+    for (size_t i = 0; i < M*N; ++i)
     {
-        sum += left(i, 0)*right(i, 0);
+        sum += left.data()[i]*right.data()[i];
     }
     return sum;
 }
