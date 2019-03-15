@@ -20,7 +20,7 @@ template <size_t M, size_t N, class T>
 std::tuple<matrix<M, M, T>,
            matrix<M, M, T>,
            matrix<M, N, T>>
-decompose_ldu(const matrix<N, N, T> &m)
+decompose_ldu(const matrix<M, N, T> &m)
 {
     // TODO
 
