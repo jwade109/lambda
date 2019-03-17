@@ -46,11 +46,6 @@ quaternion& quaternion::operator = (const quaternion &q)
     _vec = q.vec();
 }
 
-quaternion& quaternion::operator = (const axis_angle &aa)
-{
-    return *this = quaternion(aa);
-}
-
 double quaternion::scalar() const
 {
     return _scalar;
@@ -97,8 +92,8 @@ std::ostream& operator << (std::ostream &os, const quaternion &q)
 {
     os.precision(2);
     os.setf(std::ios::fixed);
-    os << "[" << q[0] << ", " << q[1] << " "
-        << q[2] << " " << q[3] << "]";
+    os << "[" << q[0] << ", " << q[1] << ", "
+        << q[2] << ", " << q[3] << "]";
     return os;
 }
 

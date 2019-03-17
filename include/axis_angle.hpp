@@ -23,8 +23,6 @@ class axis_angle
 
     axis_angle& operator = (const axis_angle &aa);
 
-    axis_angle& operator = (const quaternion &q);
-
     const vector<3>& axis() const;
 
     vector<3>& axis();

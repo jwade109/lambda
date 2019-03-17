@@ -11,6 +11,7 @@ namespace lambda
 {
 
 class quaternion;
+class axis_angle;
 
 template <size_t M, size_t N> class matrix
 {
@@ -27,7 +28,7 @@ template <size_t M, size_t N> class matrix
         sizeof...(T) == M*N, int>::type = 0>
     matrix(T... args) : _data({static_cast<double>(args)...}) { }
 
-    matrix(const quaternion& q);
+    matrix(const quaternion &q);
 
     matrix<M, N>& operator = (const matrix<M, N> &m)
     {
@@ -287,6 +288,10 @@ column_vector<3> cross_product(const row_vector<3> &left,
 
 column_vector<3> cross_product(const row_vector<3> &left,
                                const row_vector<3> &right);
+
+matrix<3, 3> skew_symmetric(const row_vector<3> &v);
+
+matrix<3, 3> skew_symmetric(const column_vector<3> &v);
 
 } // namespace lambda
 

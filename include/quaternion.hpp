@@ -24,8 +24,6 @@ class quaternion
 
     quaternion& operator = (const quaternion &q);
 
-    quaternion& operator = (const axis_angle &aa);
-
     double scalar() const;
 
     double& scalar();

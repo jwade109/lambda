@@ -32,11 +32,6 @@ axis_angle& axis_angle::operator = (const axis_angle &aa)
     _angle = aa.angle();
 }
 
-axis_angle& axis_angle::operator = (const quaternion &q)
-{
-    return *this = axis_angle(q);
-}
-
 const vector<3>& axis_angle::axis() const
 {
     return _axis;

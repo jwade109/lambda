@@ -18,3 +18,7 @@ add_library(lambda
 
 add_executable(main src/main.cpp)
 target_link_libraries(main lambda)
+add_executable(tests
+    test/catch_main.cpp
+    test/matrix_tests.cpp)
+target_link_libraries(tests lambda)
