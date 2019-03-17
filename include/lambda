@@ -1,5 +1,6 @@
 #include <matrix.hpp>
 #include <quaternion.hpp>
+#include <axis_angle.hpp>
 #include <norm.hpp>            // euclidian, frobenian
 #include <echelon.hpp>         // REF, RREF
 #include <decomposition.hpp>   // LU, LDU decomposition

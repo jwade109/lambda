@@ -1,0 +1,36 @@
+In file included from /home/jwade109/Documents/lambda/src/axis_angle.cpp:3:0:
+/home/jwade109/Documents/lambda/include/axis_angle.hpp:20:22: error: ‘quaternion’ does not name a type
+     axis_angle(const quaternion &q);
+                      ^
+/home/jwade109/Documents/lambda/include/axis_angle.hpp:24:35: error: ‘quaternion’ does not name a type
+     axis_angle& operator = (const quaternion &q);
+                                   ^
+/home/jwade109/Documents/lambda/src/axis_angle.cpp:21:1: error: prototype for ‘lambda::axis_angle::axis_angle(const lambda::quaternion&)’ does not match any in class ‘lambda::axis_angle’
+ axis_angle::axis_angle(const quaternion &q)
+ ^
+In file included from /home/jwade109/Documents/lambda/src/axis_angle.cpp:3:0:
+/home/jwade109/Documents/lambda/include/axis_angle.hpp:20:5: error: candidates are: lambda::axis_angle::axis_angle(const int&)
+     axis_angle(const quaternion &q);
+     ^
+/home/jwade109/Documents/lambda/src/axis_angle.cpp:18:1: error:                 lambda::axis_angle::axis_angle(const lambda::axis_angle&)
+ axis_angle::axis_angle(const axis_angle &aa)
+ ^
+/home/jwade109/Documents/lambda/src/axis_angle.cpp:15:1: error:                 lambda::axis_angle::axis_angle(lambda::vector<3ul>&, double)
+ axis_angle::axis_angle(const vector<3> &axis, double angle)
+ ^
+/home/jwade109/Documents/lambda/src/axis_angle.cpp:13:1: error:                 lambda::axis_angle::axis_angle()
+ axis_angle::axis_angle() : _axis(0, 0, 1), _angle(0) { }
+ ^
+/home/jwade109/Documents/lambda/src/axis_angle.cpp:35:13: error: prototype for ‘lambda::axis_angle& lambda::axis_angle::operator=(const lambda::quaternion&)’ does not match any in class ‘lambda::axis_angle’
+ axis_angle& axis_angle::operator = (const quaternion &q)
+             ^
+In file included from /home/jwade109/Documents/lambda/src/axis_angle.cpp:3:0:
+/home/jwade109/Documents/lambda/include/axis_angle.hpp:24:17: error: candidates are: lambda::axis_angle& lambda::axis_angle::operator=(const int&)
+     axis_angle& operator = (const quaternion &q);
+                 ^
+/home/jwade109/Documents/lambda/src/axis_angle.cpp:29:13: error:                 lambda::axis_angle& lambda::axis_angle::operator=(const lambda::axis_angle&)
+ axis_angle& axis_angle::operator = (const axis_angle &aa)
+             ^
+make[2]: *** [CMakeFiles/lambda.dir/src/axis_angle.cpp.o] Error 1
+make[1]: *** [CMakeFiles/lambda.dir/all] Error 2
+make: *** [all] Error 2

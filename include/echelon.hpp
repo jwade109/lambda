@@ -4,12 +4,13 @@
 #include <sstream>
 #include <algorithm>
 
+#include <matrix.hpp>
+
 namespace lambda
 {
 
-template <size_t M, size_t N, class T>
-matrix<M, N, T> swap_rows(
-    const matrix<M, N, T> &m, size_t r1, size_t r2)
+template <size_t M, size_t N>
+matrix<M, N> swap_rows(const matrix<M, N> &m, size_t r1, size_t r2)
 {
     if (r1 >= M)
     {
@@ -34,9 +35,8 @@ matrix<M, N, T> swap_rows(
     return ret;
 }
 
-template <size_t M, size_t N, class T>
-matrix<M, N, T> swap_cols(
-    const matrix<M, N, T> &m, size_t c1, size_t c2)
+template <size_t M, size_t N>
+matrix<M, N> swap_cols(const matrix<M, N> &m, size_t c1, size_t c2)
 {
     if (c1 >= M)
     {
@@ -61,14 +61,10 @@ matrix<M, N, T> swap_cols(
     return ret;
 }
 
-template <size_t M, size_t N, class T>
-matrix<M, N, T> rref(const matrix<M, N, T> &m)
+template <size_t M, size_t N>
+matrix<M, N> rref(const matrix<M, N> &m)
 {
     auto ret = m;
-
-    static_assert(M > 0 && N > 0, "Matrix must be atleast 1x1 "
-        "to compute reduced row echelon form");
-
     size_t lead = 0;
     for (size_t r = 0; r < M; ++r)
     {
@@ -111,11 +107,7 @@ matrix<M, N, T> rref(const matrix<M, N, T> &m)
     return ret;
 }
 
-template <class T>
-matrix<1, 1, T> rref(const matrix<1, 1, T> &m)
-{
-    return m;
-}
+matrix<1, 1> rref(const matrix<1, 1> &m);
 
 } // namespace lambda
 
