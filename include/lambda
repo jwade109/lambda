@@ -4,3 +4,4 @@
 #include <norm.hpp>            // euclidian, frobenian
 #include <echelon.hpp>         // REF, RREF
 #include <decomposition.hpp>   // LU, LDU decomposition
+#include <complex.hpp>

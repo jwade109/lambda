@@ -56,6 +56,8 @@ int main()
     
     }
 
+    lambda::pow(matrix<3, 3>(), 2);
+
     /* matrix, vector, quaternion tests
 
     vector<3> x(1.1, 2, 4.5);

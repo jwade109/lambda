@@ -14,11 +14,13 @@ include_directories(include/)
 add_library(lambda
     src/matrix.cpp
     src/axis_angle.cpp
-    src/quaternion.cpp)
+    src/quaternion.cpp
+    src/complex.cpp)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main lambda)
 add_executable(tests
     test/catch_main.cpp
-    test/matrix_tests.cpp)
+    test/matrix_tests.cpp
+    test/complex_tests.cpp)
 target_link_libraries(tests lambda)

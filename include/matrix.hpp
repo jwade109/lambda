@@ -124,10 +124,10 @@ using vector = column_vector<N>;
 const static vector<3>
     unitx(1, 0, 0), unity(0, 1, 0), unitz(0, 0, 1);
 
-template <size_t N> matrix<N, N> identity()
+template <size_t M, size_t N> matrix<M, N> identity()
 {
-    matrix<N, N> ret;
-    for (int i = 0; i < N; ++i)
+    matrix<M, N> ret;
+    for (int i = 0; i < M && i < N; ++i)
     {
         ret(i, i) = 1;
     }
@@ -265,6 +265,12 @@ template <size_t N> double trace(const matrix<N, N> &m)
     return sum;
 }
 
+template <size_t N>
+matrix<N, N> inverse(const matrix<N, N> &mat)
+{
+    throw std::logic_error("not implemented");
+}
+
 template <size_t M, size_t N>
 double inner_product(const matrix<M, N> &left,
                      const matrix<M, N> &right)
@@ -275,6 +281,28 @@ double inner_product(const matrix<M, N> &left,
         sum += left[i]*right[i];
     }
     return sum;
+}
+
+template <size_t N>
+matrix<N, N> pow(const matrix<N, N> &mat, size_t ex)
+{
+    if (ex < 0) throw std::logic_error("unimplemented");
+
+    if (ex == 0) return identity<N, N>();
+    else if (ex == 1) return mat;
+    
+    matrix<3, 3> ret = mat;
+    for (size_t i = 0; i < ex - 1; ++i)
+    {
+        ret = ret * mat;
+    }
+    return ret;
+}
+
+template <size_t N>
+matrix<N, N> operator ^ (const matrix<N, N> &mat, size_t ex)
+{
+    return pow(mat, ex);
 }
 
 column_vector<3> cross_product(const column_vector<3> &left,
