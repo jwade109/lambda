@@ -6,3 +6,4 @@
 #include <decomposition.hpp>   // LU, LDU decomposition
 #include <complex.hpp>
 #include <levenshtein.hpp>
+#include <solve.hpp>

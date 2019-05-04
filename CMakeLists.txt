@@ -16,7 +16,8 @@ add_library(lambda
     src/axis_angle.cpp
     src/quaternion.cpp
     src/complex.cpp
-    src/levenshtein.cpp)
+    src/levenshtein.cpp
+    src/solve.cpp)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main lambda)
@@ -24,6 +25,7 @@ add_executable(tests
     test/catch_main.cpp
     test/matrix_tests.cpp
     test/complex_tests.cpp
-    test/levenshtein_tests.cpp)
+    test/levenshtein_tests.cpp
+    test/solve_tests.cpp)
 
 target_link_libraries(tests lambda)
