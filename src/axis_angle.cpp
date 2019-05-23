@@ -12,7 +12,7 @@ namespace lambda
 
 axis_angle::axis_angle() : _axis(0, 0, 1), _angle(0) { }
 
-axis_angle::axis_angle(const vector<3> &axis, double angle)
+axis_angle::axis_angle(const column_vector<3> &axis, double angle)
     : _axis(normalize(axis)), _angle(angle) { }
 
 axis_angle::axis_angle(const axis_angle &aa)

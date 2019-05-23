@@ -6,9 +6,16 @@
 
 #include <matrix.hpp>
 
+/*! 
+    \file
+    \brief Implements RREF matrix reduction, as well as
+           some convenient matrix manipulation operations.
+*/
+
 namespace lambda
 {
 
+/// \brief Swap two rows in a matrix.
 template <size_t M, size_t N>
 matrix<M, N> swap_rows(const matrix<M, N> &m, size_t r1, size_t r2)
 {
@@ -35,6 +42,7 @@ matrix<M, N> swap_rows(const matrix<M, N> &m, size_t r1, size_t r2)
     return ret;
 }
 
+/// \brief Swap two columns in a matrix.
 template <size_t M, size_t N>
 matrix<M, N> swap_cols(const matrix<M, N> &m, size_t c1, size_t c2)
 {
@@ -61,6 +69,7 @@ matrix<M, N> swap_cols(const matrix<M, N> &m, size_t c1, size_t c2)
     return ret;
 }
 
+/// \brief Get the RREF form of a matrix.
 template <size_t M, size_t N>
 matrix<M, N> rref(const matrix<M, N> &m)
 {
@@ -107,6 +116,7 @@ matrix<M, N> rref(const matrix<M, N> &m)
     return ret;
 }
 
+/// \brief Get the RREF of a 1x1 matrix.
 matrix<1, 1> rref(const matrix<1, 1> &m);
 
 } // namespace lambda

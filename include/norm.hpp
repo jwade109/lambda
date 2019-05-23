@@ -6,9 +6,16 @@
 
 #include <matrix.hpp>
 
+/*! 
+    \file
+    \brief Contains functions normalizing and computing
+           the norms of vectors.
+*/
+
 namespace lambda
 {
 
+/// \brief Compute the euclidian norm of a vector.
 template <size_t N>
 double euclidean_norm(const column_vector<N> &v)
 {
@@ -16,12 +23,14 @@ double euclidean_norm(const column_vector<N> &v)
     return std::sqrt(normsq);
 }
 
+/// \brief Compute the euclidian norm of a vector.
 template <size_t N>
 double euclidean_norm(const row_vector<N> &v)
 {
     return euclidean_norm(transpose(v));
 }
 
+/// \brief Get the unit vector aligned with a vector.
 template <size_t N>
 column_vector<N> normalize(const column_vector<N> &v)
 {
@@ -36,6 +45,7 @@ column_vector<N> normalize(const column_vector<N> &v)
     return v/euclidean_norm(v);
 }
 
+/// \brief Get the unit vector aligned with a vector.
 template <size_t N>
 row_vector<N> normalize(const row_vector<N> &v)
 {

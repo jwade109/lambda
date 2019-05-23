@@ -4,9 +4,15 @@
 #include <tuple>
 #include <matrix.hpp>
 
+/*! 
+    \file
+    \brief Defines LU and LDU decomposition of matrices.
+*/
+
 namespace lambda
 {
 
+/// \brief Computes the LU decomposition of a square matrix.
 template <size_t N>
 std::tuple<matrix<N, N>,
            matrix<N, N>>
@@ -18,6 +24,7 @@ decompose_lu(const matrix<N, N> &m)
     return std::make_tuple(L, U);
 }
 
+/// \brief Computes the LDU decomposition of a square matrix.
 template <size_t M, size_t N>
 std::tuple<matrix<M, M>,
            matrix<M, M>,

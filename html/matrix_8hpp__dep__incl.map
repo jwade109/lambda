@@ -1,0 +1,7 @@
+<map id="include/matrix.hpp" name="include/matrix.hpp">
+<area shape="rect" id="node2" href="$axis__angle_8hpp.html" title="Defines lambda::axis_angle, a datatype used to represent rotations about an axis. ..." alt="" coords="5,80,160,107"/>
+<area shape="rect" id="node4" href="$decomposition_8hpp.html" title="Defines LU and LDU decomposition of matrices. " alt="" coords="184,80,360,107"/>
+<area shape="rect" id="node5" href="$echelon_8hpp.html" title="Implements RREF matrix reduction, as well as some convenient matrix manipulation operations. " alt="" coords="385,80,522,107"/>
+<area shape="rect" id="node6" href="$norm_8hpp.html" title="Contains functions normalizing and computing the norms of vectors. " alt="" coords="546,80,667,107"/>
+<area shape="rect" id="node3" href="$quaternion_8hpp.html" title="Defines lambda::quaternion, an elegant way to represent rotations without fear of gimbal lock..." alt="" coords="7,155,159,181"/>
+</map>
