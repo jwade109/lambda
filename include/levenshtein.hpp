@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <array>
+#include <vector>
 
 /*! 
     \file
