@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdint>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 
 /*! 
@@ -184,7 +185,7 @@ template <size_t M, size_t N> matrix<M, N> identity()
 template <size_t M, size_t N>
 std::ostream& operator << (std::ostream &os, const matrix<M, N> &m)
 {
-    os.precision(2);
+    os.precision(3);
     os.setf(std::ios::fixed);
     os << "[";
     for (size_t i = 0; i < M; ++i)
@@ -197,6 +198,36 @@ std::ostream& operator << (std::ostream &os, const matrix<M, N> &m)
         if (i < M - 1) os << "; ";
     }
     os << "]";
+}
+
+template <size_t M, size_t N>
+std::string pretty(const matrix<M, N> &m)
+{
+    std::stringstream ss;
+    ss.precision(3);
+    ss.setf(std::ios::fixed);
+
+    size_t max_len = 0;
+    for (size_t i = 0; i < M*N; ++i)
+    {
+        std::stringstream tiny;
+        tiny.precision(3);
+        tiny.setf(std::ios::fixed);
+        tiny << m[i];
+        size_t len = tiny.tellp();
+        if (len > max_len) max_len = len;
+    }
+
+    for (size_t r = 0; r < M; ++r)
+    {
+        ss << "  [";
+        for (size_t c = 0; c < N; ++c)
+        {
+            ss << std::setw(max_len + 1) << m(r, c);
+        }
+        ss << " ]\n";
+    }
+    return ss.str();
 }
 
 /// \brief Multiplication of a matrix by a scalar.
@@ -280,6 +311,23 @@ matrix<N, M> transpose(const matrix<M, N> &m)
     return ret;
 }
 
+template <size_t M, size_t N, size_t P>
+matrix<M, N + P> augment(const matrix<M, N> &A,
+                         const matrix<M, P> &x)
+{
+    matrix<M, N + P> ret;
+    for (size_t r = 0; r < M; ++r)
+    {
+        for (size_t c = 0; c < N + P; ++c)
+        {
+            if (c < N) ret(r, c) = A(r, c);
+            else ret(r, c) = x(r, c - N);
+        }
+    }
+    return ret;
+}
+
+
 /// \brief Compute the determinant of a square matrix.
 template <size_t N> double det(const matrix<N, N> &m)
 {
@@ -323,11 +371,10 @@ template <size_t N> double trace(const matrix<N, N> &m)
 }
 
 /// \brief Compute the inverse of a square matrix.
-template <size_t N>
-matrix<N, N> inverse(const matrix<N, N> &mat)
-{
-    throw std::logic_error("not implemented");
-}
+matrix<2, 2> inverse(const matrix<2, 2> &mat);
+
+/// \brief Compute the inverse of a square matrix.
+matrix<1, 1> inverse(const matrix<1, 1> &mat);
 
 /// \brief Compute the inner product of two matrices.
 template <size_t M, size_t N>

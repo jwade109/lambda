@@ -119,6 +119,21 @@ matrix<M, N> rref(const matrix<M, N> &m)
 /// \brief Get the RREF of a 1x1 matrix.
 matrix<1, 1> rref(const matrix<1, 1> &m);
 
+template <size_t N>
+matrix<N, N> inverse(const matrix<N, N> &mat)
+{
+    auto reduced = rref(augment(mat, identity<N, N>()));
+    matrix<N, N> inv;
+    for (size_t r = 0; r < N; ++r)
+    {
+        for (size_t c = 0; c < N; ++c)
+        {
+            inv(r, c) = reduced(r, N + c);
+        }
+    }
+    return inv;
+}
+
 } // namespace lambda
 
 #endif // LAMBDA_ECHELON_HPP

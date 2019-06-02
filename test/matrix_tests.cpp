@@ -21,9 +21,82 @@ TEST_CASE("Quaternion to rotation matrix.", "[matrix]")
 TEST_CASE("Throw out of bounds exception.", "[matrix]")
 {
     lambda::matrix<3, 4> m;
-    
+
     REQUIRE_THROWS_WITH( m.at(45, 3),
         "Cannot access element (45, 3) of 3x4 matrix");
+}
+
+TEST_CASE("Matrix augmentation.", "[matrix]")
+{
+
+    lambda::matrix<3, 3> A(3.4,  2.1, -5.0,
+                           7.2, -9.1, -4.0,
+                           0.8,  4.2,  4.1);
+
+    lambda::matrix<3, 2> x(4.5,  6.3,  8.2,
+                           7.0,  2.5, -9.1);
+
+    auto B = lambda::augment(A, x);
+
+    REQUIRE( B(0, 0) == Approx(3.4) );
+    REQUIRE( B(0, 1) == Approx(2.1) );
+    REQUIRE( B(0, 2) == Approx(-5.0) );
+    REQUIRE( B(1, 0) == Approx(7.2) );
+    REQUIRE( B(1, 1) == Approx(-9.1) );
+    REQUIRE( B(1, 2) == Approx(-4.0) );
+    REQUIRE( B(2, 0) == Approx(0.8) );
+    REQUIRE( B(2, 1) == Approx(4.2) );
+    REQUIRE( B(2, 2) == Approx(4.1) );
+
+    REQUIRE( B(0, 3) == Approx(4.5) );
+    REQUIRE( B(0, 4) == Approx(6.3) );
+    REQUIRE( B(1, 3) == Approx(8.2) );
+    REQUIRE( B(1, 4) == Approx(7.0) );
+    REQUIRE( B(2, 3) == Approx(2.5) );
+    REQUIRE( B(2, 4) == Approx(-9.1) );
+}
+
+TEST_CASE("Matrix inverse", "[matrix_inverse]")
+{
+    lambda::matrix<5, 5> m(1, -14, 11,  -6,  -5,
+                           6,  -3, 10,  -8, -10,
+                          -2,  11,  9, -11,  11,
+                           4,  12, -6,  -1,   7,
+                          -5,   4,  6,  -4, -10);
+
+    auto inv = lambda::inverse(m);
+
+    lambda::matrix<5, 5> ref(
+       -0.13800100021433165,
+        0.15306137029363434,
+        0.02023290705151104, 
+       -0.09784953918696863,
+       -0.13029934986068442,
+       -0.16069157676644996,
+        0.08814746017003644,
+        0.04675287561620347,
+       -0.11310995213259985,
+       -0.03555047510180753,
+       -0.3703079231263842,
+        0.2353218546831464,
+        0.14313067085804101,
+       -0.43796527827391585,
+       -0.19929984996785025,
+       -0.46860041437450883,
+        0.2519825676930771,
+        0.11695363292134028,
+       -0.5091090948060298,
+       -0.24540973065656926,
+       -0.030020718725441167,
+       -0.0008716153461456026,
+        0.04768164606701436,
+       -0.05545474030149318,
+       -0.07048653282846325);
+
+    for (size_t i = 0; i < 25; ++i)
+    {
+        REQUIRE( inv[i] == Approx(ref[i]) );
+    }
 }
 
 TEST_CASE("Matrix power calculation.", "[matrix]")
