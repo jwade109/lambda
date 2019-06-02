@@ -26,6 +26,7 @@ add_executable(tests
     test/matrix_tests.cpp
     test/complex_tests.cpp
     test/levenshtein_tests.cpp
+    test/kalman_tests.cpp
     test/solve_tests.cpp)
 
 target_link_libraries(tests lambda)
