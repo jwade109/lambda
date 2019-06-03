@@ -162,13 +162,12 @@ template <size_t N> using row_vector = matrix<1, N>;
 /// \brief Convenience typedef; default vectors are column vectors.
 template <size_t N> using vector = column_vector<N>;
 
-const static vector<3>
-    /// \brief X basis vector.
-    unitx(1, 0, 0),
-    /// \brief Y basis vector.
-    unity(0, 1, 0),
-    /// \brief Z basis vector.
-    unitz(0, 0, 1);
+/// \brief X basis vector.
+const static column_vector<3> unitx(1, 0, 0);
+/// \brief Y basis vector.
+const static column_vector<3> unity(0, 1, 0);
+/// \brief Z basis vector.
+const static column_vector<3> unitz(0, 0, 1);
 
 /// \brief Gets the identity vector of a given dimension.
 template <size_t M, size_t N> matrix<M, N> identity()
@@ -200,6 +199,7 @@ std::ostream& operator << (std::ostream &os, const matrix<M, N> &m)
     os << "]";
 }
 
+/// \brief Produces a multiline string representation of a matrix.
 template <size_t M, size_t N>
 std::string pretty(const matrix<M, N> &m)
 {
@@ -311,6 +311,7 @@ matrix<N, M> transpose(const matrix<M, N> &m)
     return ret;
 }
 
+/// \brief Augment a matrix with another matrix.
 template <size_t M, size_t N, size_t P>
 matrix<M, N + P> augment(const matrix<M, N> &A,
                          const matrix<M, P> &x)

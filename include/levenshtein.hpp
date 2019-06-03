@@ -48,7 +48,7 @@ size_t levenshtein(const std::vector<A> &left, const std::vector<B> &right)
     return dist[M][N];
 }
 
-/// \brief Compute the levenshtein edit stance between two strings.
+/// \brief Compute the levenshtein edit distance between two strings.
 size_t levenshtein(const std::string &left, const std::string &right);
 
 /// \brief Compute the levenshtein edit distance between two arrays.

@@ -119,9 +119,18 @@ matrix<M, N> rref(const matrix<M, N> &m)
 /// \brief Get the RREF of a 1x1 matrix.
 matrix<1, 1> rref(const matrix<1, 1> &m);
 
+/// \brief Compute the inverse of a square matrix.
 template <size_t N>
 matrix<N, N> inverse(const matrix<N, N> &mat)
 {
+    double d = det(mat);
+    if (d == 0)
+    {
+        std::stringstream ss;
+        ss << "Cannot invert matrix " << mat
+            << ", which is singular";
+        throw std::domain_error(ss.str());
+    }
     auto reduced = rref(augment(mat, identity<N, N>()));
     matrix<N, N> inv;
     for (size_t r = 0; r < N; ++r)
