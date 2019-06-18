@@ -371,6 +371,11 @@ template <size_t N> double trace(const matrix<N, N> &m)
     return sum;
 }
 
+template <size_t N> bool is_invertible(const matrix<N, N> &m)
+{
+    return det(m) != 0;
+}
+
 /// \brief Compute the inverse of a square matrix.
 matrix<2, 2> inverse(const matrix<2, 2> &mat);
 

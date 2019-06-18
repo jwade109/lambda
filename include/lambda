@@ -8,3 +8,4 @@
 #include <levenshtein.hpp>
 #include <solve.hpp>
 #include <kalman_filter.hpp>
+#include <crc.hpp>

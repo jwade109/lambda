@@ -123,8 +123,7 @@ matrix<1, 1> rref(const matrix<1, 1> &m);
 template <size_t N>
 matrix<N, N> inverse(const matrix<N, N> &mat)
 {
-    double d = det(mat);
-    if (d == 0)
+    if (!is_invertible(mat))
     {
         std::stringstream ss;
         ss << "Cannot invert matrix " << mat
