@@ -101,14 +101,13 @@ TEST_CASE("Matrix inverse", "[matrix_inverse]")
 
 TEST_CASE("Inverse of non-invertible matrix.", "[matrix_inverse]")
 {
-    lambda::matrix<2, 2> m1(1, 2, 2, 4);
+    using Catch::Matchers::Contains;
 
-    std::cout << lambda::pretty(lambda::inverse(m1));
+    lambda::matrix<2, 2> m1(1, 2, 2, 4);
+    REQUIRE_THROWS_WITH(lambda::inverse(m1), Contains("Cannot invert matrix"));
 
     lambda::matrix<3, 3> m2(1, 2, 3, 4, 5, 6, 1, 2, 3);
-
-    std::cout << lambda::pretty(m2);
-    std::cout << lambda::pretty(lambda::inverse(m2));
+    REQUIRE_THROWS_WITH(lambda::inverse(m2), Contains("Cannot invert matrix"));
 }
 
 TEST_CASE("Matrix power calculation.", "[matrix]")

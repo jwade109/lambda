@@ -17,7 +17,8 @@ add_library(lambda
     src/quaternion.cpp
     src/complex.cpp
     src/levenshtein.cpp
-    src/solve.cpp)
+    src/solve.cpp
+)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main lambda)
@@ -28,7 +29,6 @@ add_executable(tests
     test/levenshtein_tests.cpp
     test/kalman_tests.cpp
     test/solve_tests.cpp
-    test/crc_tests.cpp
 )
 
 target_link_libraries(tests lambda)
