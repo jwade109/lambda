@@ -31,7 +31,7 @@ template <class D = dimensions::unitless,
     public:
 
     unit() : _value(0) { }
-    unit(double value) : _value(value) { }
+    explicit unit(double value) : _value(value) { }
     double value() const { return _value; }
 
     template <class R2>
