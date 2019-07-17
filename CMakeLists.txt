@@ -18,6 +18,7 @@ add_library(lambda
     src/complex.cpp
     src/levenshtein.cpp
     src/solve.cpp
+    src/units.cpp
 )
 
 add_executable(main src/main.cpp)
