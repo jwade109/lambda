@@ -22,6 +22,7 @@ add_library(lambda
     src/matrix.cpp
     src/quaternion.cpp
     src/solve.cpp
+    src/elementary_automata.cpp
 )
 
 add_executable(main src/main.cpp)
@@ -34,6 +35,7 @@ add_executable(tests
     test/levenshtein_tests.cpp
     test/matrix_tests.cpp
     test/solve_tests.cpp
+    test/automata_tests.cpp
 )
 
 target_link_libraries(tests lambda)
