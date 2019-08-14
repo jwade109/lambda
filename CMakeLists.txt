@@ -12,11 +12,13 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 include_directories(include/)
 
 add_library(lambda
-    src/matrix.cpp
     src/axis_angle.cpp
-    src/quaternion.cpp
     src/complex.cpp
+    src/dynamic_matrix.cpp
+    src/echelon.cpp
     src/levenshtein.cpp
+    src/matrix.cpp
+    src/quaternion.cpp
     src/solve.cpp
     src/units.cpp
 )
@@ -25,10 +27,11 @@ add_executable(main src/main.cpp)
 target_link_libraries(main lambda)
 add_executable(tests
     test/catch_main.cpp
-    test/matrix_tests.cpp
     test/complex_tests.cpp
-    test/levenshtein_tests.cpp
+    test/dynamic_matrix_tests.cpp
     test/kalman_tests.cpp
+    test/levenshtein_tests.cpp
+    test/matrix_tests.cpp
     test/solve_tests.cpp
     test/units_tests.cpp
 )
