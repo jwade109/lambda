@@ -14,7 +14,7 @@ std::vector<bool> next_generation(uint8_t rule,
     const std::vector<bool> &current_state);
 
 std::string pretty(uint8_t rule, uint8_t generations,
-    const std::vector<bool> &seed = {1});
+    const std::vector<bool> &seed);
 
 } // namespace lambda
 

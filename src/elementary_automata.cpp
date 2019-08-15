@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <bitset>
+#include <sstream>
 
 namespace lambda
 {
@@ -11,18 +12,8 @@ namespace lambda
 bool decode_rule(uint8_t rule, bool left, bool center, bool right)
 {
     std::bitset<8> bits(rule);
-    bool rules[2][2][2];
-
-    rules[1][1][1] = bits[7];
-    rules[1][1][0] = bits[6];
-    rules[1][0][1] = bits[5];
-    rules[1][0][0] = bits[4];
-    rules[0][1][1] = bits[3];
-    rules[0][1][0] = bits[2];
-    rules[0][0][1] = bits[1];
-    rules[0][0][0] = bits[0];
-
-    return rules[left][center][right];
+    uint8_t index = (left << 2) + (center << 1) + right;
+    return bits[index];
 }
 
 std::vector<bool> get_generation(uint8_t rule, uint8_t generation)
@@ -55,31 +46,32 @@ std::vector<bool> next_generation(uint8_t rule,
 std::string pretty(uint8_t rule, uint8_t generations,
     const std::vector<bool> &seed)
 {
+    std::stringstream ss;
     std::vector<std::vector<bool>> generations_list;
     generations_list.resize(generations);
     generations_list[0] = {1};
-    size_t max_size = generations_list[0].size();
     for (size_t i = 1; i < generations; ++i)
     {
-        generations_list[i] = next_generation(rule,
-            generations_list[i - 1]);
-        max_size += 2;
+        generations_list[i] = next_generation(rule, generations_list[i - 1]);
     }
+    size_t max_size = generations_list[generations - 1].size();
 
     for (const auto &gen : generations_list)
     {
-        std::cout << "  ";
+        ss << "  ";
         for (size_t i = 0; i < (max_size - gen.size())/2; ++i)
         {
-            std::cout << " ";
+            ss << " ";
         }
         for (bool cell : gen)
         {
-            std::cout << (cell ? "▄" : " ");
+            ss << (cell ? "▄" : " ");
         }
-        std::cout << std::endl;
+        ss << "\n";
     }
-    std::cout << std::endl;
+    ss << "\n";
+
+    return ss.str();
 }
 
 } // namespace lambda

@@ -1,19 +1,13 @@
 #include "catch.hpp"
 #include <lambda>
 
-TEST_CASE("Test rule 30.", "[automata]")
+TEST_CASE("Test elementary cellular automata rules.", "[automata]")
 {
-    lambda::pretty(30, 10);
-    lambda::pretty(30, 10);
-    lambda::pretty(30, 10);
-}
-
-TEST_CASE("Test rule 90.", "[automata]")
-{
-
-}
-
-TEST_CASE("Test rule 158.", "[automata]")
-{
-
+    std::cout << lambda::pretty(30, 20, {1});
+    std::cout << lambda::pretty(60, 20, {1});
+    std::cout << lambda::pretty(90, 20, {1});
+    std::cout << lambda::pretty(182, 20, {1});
+    std::cout << lambda::pretty(220, 20, {1});
+    std::cout << lambda::pretty(222, 20, {1});
+    std::cout << lambda::pretty(250, 20, {1});
 }
