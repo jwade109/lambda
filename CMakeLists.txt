@@ -36,6 +36,7 @@ add_executable(tests
     test/matrix_tests.cpp
     test/solve_tests.cpp
     test/automata_tests.cpp
+    test/decomposition_tests.cpp
 )
 
 target_link_libraries(tests lambda)

@@ -8,6 +8,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include <matrix.hpp>
+
 /*!
     \file
     \brief Defines lambda::dynamic_matrix, as well as supporting operations for
@@ -33,6 +35,9 @@ class dynamic_matrix
     /// \brief Construct with dimensions and contents.
     dynamic_matrix(size_t rows, size_t columns,
                    const std::vector<double> &data);
+
+    template <size_t M, size_t N>
+    dynamic_matrix(const lambda::matrix<M, N> &mat);
 
     /// \brief Assignment operator.
     dynamic_matrix& operator = (const dynamic_matrix &m);
@@ -88,6 +93,10 @@ class dynamic_matrix
     /// \brief Throws an exception if an index is out of bounds.
     void range_check(size_t i, size_t j) const;
 };
+
+template <size_t M, size_t N>
+dynamic_matrix::dynamic_matrix(const lambda::matrix<M, N> &mat)
+    : _data(begin(mat.data()), end(mat.data())), _rows(M), _columns(N) { }
 
 bool operator == (const dynamic_matrix &left,
                   const dynamic_matrix &right);
