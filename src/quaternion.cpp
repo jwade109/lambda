@@ -44,6 +44,7 @@ quaternion& quaternion::operator = (const quaternion &q)
 {
     _scalar = q.scalar();
     _vec = q.vec();
+    return *this;
 }
 
 double quaternion::scalar() const

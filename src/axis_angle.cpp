@@ -30,6 +30,7 @@ axis_angle& axis_angle::operator = (const axis_angle &aa)
 {
     _axis = aa.axis();
     _angle = aa.angle();
+    return *this;
 }
 
 const vector<3>& axis_angle::axis() const

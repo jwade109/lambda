@@ -253,6 +253,7 @@ class composite_unit
 
 template <class D, class R, int8_t E>
 auto make_composite(unit<D, R, E> unit)
+    -> composite_unit<decltype(unit)>
 {
     return composite_unit<decltype(unit)>(unit.value());
 }
@@ -293,7 +294,8 @@ std::basic_ostream<Ch, Tr>& operator <<
 // COMPOSITE TO OSTREAM
 
 template <class ...U>
-std::ostream& operator << (std::ostream &os, const composite_unit<U...> &u)
+std::ostream& operator << (std::ostream &os,
+    const composite_unit<U...> &u)
 {
     return os << u.value() << " " << u.dimensions();
 }
@@ -304,13 +306,16 @@ std::ostream& operator << (std::ostream &os, const composite_unit<U...> &u)
 template <class D1, class D2, int8_t E1, int8_t E2>
 auto operator * (const unit<D1, std::ratio<1>, E1> &left,
                  const unit<D2, std::ratio<1>, E2> &right)
+    -> composite_unit<decltype(left), decltype(right)>
 {
     return composite_unit<unit<D1, std::ratio<1>, E1>,
         unit<D2, std::ratio<1>, E2>>(left.value()*right.value());
 }
 
 template <class D1, class D2, class R1, class R2, int8_t E1, int8_t E2>
-auto operator * (const unit<D1, R1, E1> &left, const unit<D2, R2, E2> &right)
+auto operator * (const unit<D1, R1, E1> &left,
+                 const unit<D2, R2, E2> &right)
+    -> composite_unit<decltype(left), decltype(right)>
 {
     return unit<D1, std::ratio<1>, E1>(left)*
            unit<D2, std::ratio<1>, E2>(right);
@@ -319,6 +324,7 @@ auto operator * (const unit<D1, R1, E1> &left, const unit<D2, R2, E2> &right)
 template <class ...U1, class ...U2>
 auto operator * (const composite_unit<U1...> &left,
                  const composite_unit<U2...> &right)
+    -> composite_unit<U1..., U2...>
 {
     return composite_unit<U1..., U2...>(left.value()*right.value());
 }
@@ -329,13 +335,18 @@ auto operator * (const composite_unit<U1...> &left,
 template <class D1, class D2, int8_t E1, int8_t E2>
 auto operator / (const unit<D1, std::ratio<1>, E1> &left,
                  const unit<D2, std::ratio<1>, E2> &right)
+    -> composite_unit<unit<D1, std::ratio<1>, E1>,
+                      unit<D2, std::ratio<1>, -E2>>
 {
     return composite_unit<unit<D1, std::ratio<1>, E1>,
         unit<D2, std::ratio<1>, -E2>>(left.value()/right.value());
 }
 
 template <class D1, class D2, class R1, class R2, int8_t E1, int8_t E2>
-auto operator / (const unit<D1, R1, E1> &left, const unit<D2, R2, E2> &right)
+auto operator / (const unit<D1, R1, E1> &left,
+                 const unit<D2, R2, E2> &right)
+    -> composite_unit<unit<D1, std::ratio<1>, E1>,
+                      unit<D2, std::ratio<1>, -E2>>
 {
     return unit<D1, std::ratio<1>, E1>(left)/
            unit<D2, std::ratio<1>, E2>(right);
@@ -344,6 +355,7 @@ auto operator / (const unit<D1, R1, E1> &left, const unit<D2, R2, E2> &right)
 template <class ...U1, class ...U2>
 auto operator / (const composite_unit<U1...> &left,
                  const composite_unit<U2...> &right)
+    -> void
 {
     // return composite_unit<U1..., U2...>(left.value()/right.value());
 }

@@ -59,6 +59,7 @@ template <size_t M, size_t N> class matrix
         {
             _data[i] = m[i];
         }
+        return *this;
     }
 
     /// \brief Access an element in row i, column j.
@@ -173,7 +174,7 @@ const static column_vector<3> unitz(0, 0, 1);
 template <size_t M, size_t N> matrix<M, N> identity()
 {
     matrix<M, N> ret;
-    for (int i = 0; i < M && i < N; ++i)
+    for (size_t i = 0; i < M && i < N; ++i)
     {
         ret(i, i) = 1;
     }
@@ -196,7 +197,7 @@ std::ostream& operator << (std::ostream &os, const matrix<M, N> &m)
         }
         if (i < M - 1) os << "; ";
     }
-    os << "]";
+    return os << "]";
 }
 
 /// \brief Produces a multiline string representation of a matrix.

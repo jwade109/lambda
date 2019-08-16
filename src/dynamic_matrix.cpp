@@ -27,6 +27,7 @@ dynamic_matrix& dynamic_matrix::operator = (const dynamic_matrix &m)
     _data = m.data();
     _rows = m.rows();
     _columns = m.columns();
+    return *this;
 }
 
 /// \brief Get the number of rows in this matrix.
@@ -120,7 +121,7 @@ void dynamic_matrix::range_check(size_t i) const
 /// \brief Throws an exception if an index is out of bounds.
 void dynamic_matrix::range_check(size_t i, size_t j) const
 {
-    if (i >= _rows || j >= _columns || i < 0 || j < 0)
+    if (i >= _rows || j >= _columns)
     {
         std::stringstream ss;
         ss << "Cannot access element (" << i << ", " << j
@@ -160,7 +161,7 @@ std::ostream& operator << (std::ostream &os, const dynamic_matrix &m)
         }
         if (i < M - 1) os << "; ";
     }
-    os << "]";
+    return os << "]";
 }
 
 /// \brief Produces a multiline string representation of a matrix.
