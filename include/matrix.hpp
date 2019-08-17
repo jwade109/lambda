@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <sstream>
 
-/*! 
+/*!
     \file
     \brief Defines lambda::matrix, as well as supporting operations for
     basic matrix arithmetic.
@@ -156,8 +156,18 @@ template <size_t M, size_t N> class matrix
     }
 };
 
+template <size_t M, size_t N>
+bool operator == (const matrix<M, N> &left, const matrix<M, N> &right)
+{
+    for (size_t i = 0; i < M*N; ++i)
+    {
+        if (left[i] != right[i]) return false;
+    }
+    return true;
+}
+
 /// \brief Convenience typedef for column vectors.
-template <size_t N> using column_vector = matrix<N, 1>; 
+template <size_t N> using column_vector = matrix<N, 1>;
 /// \brief Convenience typedef for row vectors.
 template <size_t N> using row_vector = matrix<1, N>;
 /// \brief Convenience typedef; default vectors are column vectors.
@@ -377,6 +387,11 @@ template <size_t N> bool is_invertible(const matrix<N, N> &m)
     return det(m) != 0;
 }
 
+template <size_t N> bool is_unitary(const matrix<N, N> &m)
+{
+    return m*transpose(m) == identity<N, N>();
+}
+
 /// \brief Compute the inverse of a square matrix.
 matrix<2, 2> inverse(const matrix<2, 2> &mat);
 
@@ -404,7 +419,7 @@ matrix<N, N> pow(const matrix<N, N> &mat, size_t ex)
 
     if (ex == 0) return identity<N, N>();
     else if (ex == 1) return mat;
-    
+
     matrix<3, 3> ret = mat;
     for (size_t i = 0; i < ex - 1; ++i)
     {
