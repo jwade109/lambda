@@ -161,3 +161,16 @@ TEST_CASE("Matrix power calculation.", "[matrix]")
     REQUIRE(m5(2, 1) == Approx(22031.2));
     REQUIRE(m5(2, 2) == Approx(-2406.84));
 }
+
+TEST_CASE("Test skew-symmetric matrix.", "[matrix]")
+{
+    lambda::vector<3> vec(4, 5, -2);
+    auto skew = ~vec;
+
+    lambda::matrix<3, 3> expected(0, 2,  5,
+                                 -2, 0, -4,
+                                 -5, 4,  0);
+
+    REQUIRE( skew == expected );
+}
+

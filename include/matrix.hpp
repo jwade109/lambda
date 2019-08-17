@@ -435,6 +435,20 @@ matrix<N, N> operator ^ (const matrix<N, N> &mat, size_t ex)
     return pow(mat, ex);
 }
 
+/// \brief Convenience operator for skew-symmetric matrix of a vector.
+template <size_t N>
+matrix<N, N> operator ~ (const column_vector<N> &vec)
+{
+    return skew_symmetric(vec);
+}
+
+/// \brief Convenience operator for skew-symmetric matrix of a vector.
+template <size_t N>
+matrix<N, N> operator ~ (const row_vector<N> &vec)
+{
+    return skew_symmetric(vec);
+}
+
 /// \brief Compute the cross product of two vectors.
 column_vector<3> cross_product(const column_vector<3> &left,
                                const column_vector<3> &right);
