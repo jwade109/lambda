@@ -26,10 +26,14 @@ class axis_angle;
 /// \brief A statically sized matrix class. Supports basic operations like
 /// addition, multiplication. Is default-constructable, copy-constructable,
 /// and is constructable from quaternions and axis-angles.
-template <size_t M, size_t N> class matrix
+template <size_t M, size_t N, typename R = double> class matrix
 {
     static_assert(M > 0 && N > 0,
         "Cannot create matrix of dimension 0");
+
+    const size_t rows = M;
+    const size_t columns = N;
+    using representation = R;
 
     public:
 
@@ -53,7 +57,7 @@ template <size_t M, size_t N> class matrix
     matrix(const axis_angle &aa);
 
     /// \brief Assignment operator.
-    matrix<M, N>& operator = (const matrix<M, N> &m)
+    matrix<M, N, R>& operator = (const matrix<M, N, R> &m)
     {
         for (size_t i = 0; i < M*N; ++i)
         {
@@ -63,34 +67,34 @@ template <size_t M, size_t N> class matrix
     }
 
     /// \brief Access an element in row i, column j.
-    double operator () (size_t i, size_t j) const
+    R operator () (size_t i, size_t j) const
     {
         return _data[N*i + j];
     }
 
     /// \brief Get a reference to the element (i, j).
-    double& operator () (size_t i, size_t j)
+    R& operator () (size_t i, size_t j)
     {
         return _data[N*i + j];
     }
 
     /// \brief Get the element at index i, interpreting the matrix
     /// as a 1-dimensional array in a row-major fashion.
-    double operator [] (size_t i) const
+    R operator [] (size_t i) const
     {
         return _data[i];
     }
 
     /// \brief Get a reference to the element at i, in the
     /// equivalent 1-dimensional row-major array.
-    double& operator [] (size_t i)
+    R& operator [] (size_t i)
     {
         return _data[i];
     }
 
     /// \brief Same as operator [], but throws an exception if
     /// the index provided is out of bounds.
-    double at(size_t i) const
+    R at(size_t i) const
     {
         range_check(i);
         return _data[i];
@@ -98,7 +102,7 @@ template <size_t M, size_t N> class matrix
 
     /// \brief Same as operator [], but throws an exception if
     /// the index provided is out of bounds.
-    double& at(size_t i)
+    R& at(size_t i)
     {
         range_check(i);
         return _data[i];
@@ -106,7 +110,7 @@ template <size_t M, size_t N> class matrix
 
     /// \brief Same as operator (), but throws an exception if
     /// the index provided is out of bounds.
-    double at(size_t i, size_t j) const
+    R at(size_t i, size_t j) const
     {
         range_check(i, j);
         return _data[N*i + j];
@@ -114,14 +118,14 @@ template <size_t M, size_t N> class matrix
 
     /// \brief Same as operator (), but throws an exception if
     /// the index provided is out of bounds.
-    double& at(size_t i, size_t j)
+    R& at(size_t i, size_t j)
     {
         range_check(i, j);
         return _data[N*i + j];
     }
 
     /// \brief Get a const ref to the underlying data of this matrix.
-    const std::array<double, M*N>& data() const
+    const std::array<R, M*N>& data() const
     {
         return _data;
     }
@@ -129,7 +133,7 @@ template <size_t M, size_t N> class matrix
     private:
 
     /// \brief Matrix elements stored here.
-    std::array<double, M*N> _data;
+    std::array<R, M*N> _data;
 
     /// \brief Throws an exception if an index is out of bounds.
     static void range_check(size_t i)
@@ -167,11 +171,14 @@ bool operator == (const matrix<M, N> &left, const matrix<M, N> &right)
 }
 
 /// \brief Convenience typedef for column vectors.
-template <size_t N> using column_vector = matrix<N, 1>;
+template <size_t N, typename R = double>
+using column_vector = matrix<N, 1, R>;
 /// \brief Convenience typedef for row vectors.
-template <size_t N> using row_vector = matrix<1, N>;
+template <size_t N, typename R = double>
+using row_vector = matrix<1, N, R>;
 /// \brief Convenience typedef; default vectors are column vectors.
-template <size_t N> using vector = column_vector<N>;
+template <size_t N, typename R = double>
+using vector = column_vector<N, R>;
 
 /// \brief X basis vector.
 const static column_vector<3> unitx(1, 0, 0);
@@ -181,9 +188,10 @@ const static column_vector<3> unity(0, 1, 0);
 const static column_vector<3> unitz(0, 0, 1);
 
 /// \brief Gets the identity vector of a given dimension.
-template <size_t M, size_t N> matrix<M, N> identity()
+template <size_t M, size_t N, typename R = double>
+matrix<M, N, R> identity()
 {
-    matrix<M, N> ret;
+    matrix<M, N, R> ret;
     for (size_t i = 0; i < M && i < N; ++i)
     {
         ret(i, i) = 1;
@@ -192,8 +200,8 @@ template <size_t M, size_t N> matrix<M, N> identity()
 }
 
 /// \brief Print a matrix to a std::ostream.
-template <size_t M, size_t N>
-std::ostream& operator << (std::ostream &os, const matrix<M, N> &m)
+template <size_t M, size_t N, typename R>
+std::ostream& operator << (std::ostream &os, const matrix<M, N, R> &m)
 {
     os.precision(3);
     os.setf(std::ios::fixed);
@@ -211,8 +219,8 @@ std::ostream& operator << (std::ostream &os, const matrix<M, N> &m)
 }
 
 /// \brief Produces a multiline string representation of a matrix.
-template <size_t M, size_t N>
-std::string pretty(const matrix<M, N> &m)
+template <size_t M, size_t N, typename R>
+std::string pretty(const matrix<M, N, R> &m)
 {
     std::stringstream ss;
     ss.precision(3);
@@ -242,8 +250,8 @@ std::string pretty(const matrix<M, N> &m)
 }
 
 /// \brief Multiplication of a matrix by a scalar.
-template <size_t M, size_t N, class T>
-matrix<M, N> operator * (const matrix<M, N> &m, T scalar)
+template <size_t M, size_t N, typename R, class T>
+matrix<M, N, R> operator * (const matrix<M, N, R> &m, T scalar)
 {
     auto ret = m;
     for (size_t i = 0; i < M; ++i)
@@ -257,25 +265,26 @@ matrix<M, N> operator * (const matrix<M, N> &m, T scalar)
 }
 
 /// \brief Multiplication of a matrix by a scalar.
-template <size_t M, size_t N, class T>
-matrix<M, N> operator * (T scalar, const matrix<M, N> &m)
+template <size_t M, size_t N, typename R, class T>
+matrix<M, N> operator * (T scalar, const matrix<M, N, R> &m)
 {
     return m*scalar;
 }
 
 /// \brief Division of a matrix by a scalar.
-template <size_t M, size_t N, class T>
-matrix<M, N> operator / (const matrix<M, N> &m, T divisor)
+template <size_t M, size_t N, typename R, class T>
+matrix<M, N> operator / (const matrix<M, N, R> &m, T divisor)
 {
     return m*(1.0/divisor);
 }
 
 /// \brief Addition of two matrices.
-template <size_t M, size_t N>
-matrix<M, N> operator + (const matrix<M, N> &left,
-                         const matrix<M, N> &right)
+template <size_t M, size_t N, typename R1, typename R2>
+auto operator + (const matrix<M, N, R1> &left,
+                 const matrix<M, N, R2> &right)
+    -> matrix<M, N, decltype(R1()*R2())>
 {
-    matrix<M, N> ret;
+    matrix<M, N, decltype(R1()*R2())> ret;
     for (size_t i = 0; i < M; ++i)
     {
         for (size_t j = 0; j < N; ++j)
@@ -287,9 +296,10 @@ matrix<M, N> operator + (const matrix<M, N> &left,
 }
 
 /// \brief Multiplication of two matrices.
-template <size_t M, size_t N, size_t P>
-matrix<M, P> operator * (const matrix<M, N> &left,
-                         const matrix<N, P> &right)
+template <size_t M, size_t N, size_t P, typename R1, typename R2>
+auto operator * (const matrix<M, N, R1> &left,
+                 const matrix<N, P, R2> &right)
+    -> matrix<M, P, decltype(R1()*R2())>
 {
     matrix<M, P> ret;
     for (size_t i = 0; i < M; ++i)
@@ -308,10 +318,10 @@ matrix<M, P> operator * (const matrix<M, N> &left,
 }
 
 /// \brief Get the transpose of a matrix.
-template <size_t M, size_t N>
-matrix<N, M> transpose(const matrix<M, N> &m)
+template <size_t M, size_t N, typename R>
+matrix<N, M, R> transpose(const matrix<M, N, R> &m)
 {
-    matrix<N, M> ret;
+    matrix<N, M, R> ret;
     for (size_t i = 0; i < M; ++i)
     {
         for (size_t j = 0; j < N; ++j)
@@ -323,11 +333,11 @@ matrix<N, M> transpose(const matrix<M, N> &m)
 }
 
 /// \brief Augment a matrix with another matrix.
-template <size_t M, size_t N, size_t P>
-matrix<M, N + P> augment(const matrix<M, N> &A,
-                         const matrix<M, P> &x)
+template <size_t M, size_t N, size_t P, typename R>
+matrix<M, N + P, R> augment(const matrix<M, N, R> &A,
+                         const matrix<M, P, R> &x)
 {
-    matrix<M, N + P> ret;
+    matrix<M, N + P, R> ret;
     for (size_t r = 0; r < M; ++r)
     {
         for (size_t c = 0; c < N + P; ++c)
@@ -341,13 +351,14 @@ matrix<M, N + P> augment(const matrix<M, N> &A,
 
 
 /// \brief Compute the determinant of a square matrix.
-template <size_t N> double det(const matrix<N, N> &m)
+template <size_t N, typename R>
+double det(const matrix<N, N, R> &m)
 {
     double sum = 0;
     for (size_t i = 0; i < N; ++i)
     {
         double top = m(0, i);
-        matrix<N-1, N-1> sub;
+        matrix<N-1, N-1, R> sub;
 
         for (size_t r = 1; r < N; ++r)
         {
@@ -382,14 +393,16 @@ template <size_t N> double trace(const matrix<N, N> &m)
     return sum;
 }
 
-template <size_t N> bool is_invertible(const matrix<N, N> &m)
+template <size_t N, typename R>
+bool is_invertible(const matrix<N, N, R> &m)
 {
     return det(m) != 0;
 }
 
-template <size_t N> bool is_unitary(const matrix<N, N> &m)
+template <size_t N, typename R>
+bool is_unitary(const matrix<N, N, R> &m)
 {
-    return m*transpose(m) == identity<N, N>();
+    return m*transpose(m) == identity<N, N, R>();
 }
 
 /// \brief Compute the inverse of a square matrix.
@@ -399,11 +412,11 @@ matrix<2, 2> inverse(const matrix<2, 2> &mat);
 matrix<1, 1> inverse(const matrix<1, 1> &mat);
 
 /// \brief Compute the inner product of two matrices.
-template <size_t M, size_t N>
-double inner_product(const matrix<M, N> &left,
-                     const matrix<M, N> &right)
+template <size_t M, size_t N, typename R>
+double inner_product(const matrix<M, N, R> &left,
+                     const matrix<M, N, R> &right)
 {
-    double sum = 0;
+    R sum = 0;
     for (size_t i = 0; i < M*N; ++i)
     {
         sum += left[i]*right[i];
@@ -412,12 +425,12 @@ double inner_product(const matrix<M, N> &left,
 }
 
 /// \brief Compute a matrix raised to a power.
-template <size_t N>
-matrix<N, N> pow(const matrix<N, N> &mat, size_t ex)
+template <size_t N, typename R>
+matrix<N, N> pow(const matrix<N, N, R> &mat, size_t ex)
 {
     if (ex < 0) throw std::logic_error("unimplemented");
 
-    if (ex == 0) return identity<N, N>();
+    if (ex == 0) return identity<N, N, R>();
     else if (ex == 1) return mat;
 
     matrix<3, 3> ret = mat;
