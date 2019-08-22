@@ -47,7 +47,7 @@ template <size_t M, size_t N, typename R = double> class matrix
     /// Elements are listed in row-major order.
     template <typename ...T, typename std::enable_if<
         sizeof...(T) == M*N, int>::type = 0>
-    matrix(T... args) : _data({static_cast<double>(args)...}) { }
+    matrix(T... args) : _data({static_cast<R>(args)...}) { }
 
     /// \brief Construct a matrix from a quaternion. Only unit quaternions
     /// are guaranteed to produce valid rotation matrices.
@@ -301,12 +301,12 @@ auto operator * (const matrix<M, N, R1> &left,
                  const matrix<N, P, R2> &right)
     -> matrix<M, P, decltype(R1()*R2())>
 {
-    matrix<M, P> ret;
+    matrix<M, P, decltype(R1()*R2())> ret;
     for (size_t i = 0; i < M; ++i)
     {
         for (size_t j = 0; j < P; ++j)
         {
-            double sum = 0;
+            decltype(R1()*R2()) sum = 0;
             for (size_t k = 0; k < N; ++k)
             {
                 sum += left(i, k) * right(k, j);

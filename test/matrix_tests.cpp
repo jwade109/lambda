@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include <lambda>
+#include <complex>
 
 TEST_CASE("Quaternion to rotation matrix.", "[matrix]")
 {
@@ -69,7 +70,7 @@ TEST_CASE("Matrix inverse", "[matrix_inverse]")
     lambda::matrix<5, 5> ref(
        -0.13800100021433165,
         0.15306137029363434,
-        0.02023290705151104, 
+        0.02023290705151104,
        -0.09784953918696863,
        -0.13029934986068442,
        -0.16069157676644996,
@@ -174,3 +175,13 @@ TEST_CASE("Test skew-symmetric matrix.", "[matrix]")
     REQUIRE( skew == expected );
 }
 
+template <size_t M, size_t N>
+using complex_matrix = lambda::matrix<M, N, std::complex<double>>;
+
+TEST_CASE("Complex matrix.", "[matrix]")
+{
+    complex_matrix<2, 2> cm(3 + 4i, 4, 2, -4i);
+
+    std::cout << lambda::pretty(cm) << std::endl;
+    std::cout << lambda::pretty(cm*cm) << std::endl;
+}
