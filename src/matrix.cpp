@@ -23,33 +23,6 @@ template <> matrix<3, 3>::matrix(const quaternion &q)
 template <> matrix<3, 3>::matrix(const axis_angle &aa)
     : _data({0, 0, 0, 0, 0, 0, 0, 0, 0}) { }
 
-/// \brief Computes the inverse of a 2x2 matrix.
-matrix<2, 2> inverse(const matrix<2, 2> &mat)
-{
-    if (!is_invertible(mat))
-    {
-        std::stringstream ss;
-        ss << "Cannot invert matrix " << mat
-            << ", which is singular";
-        throw std::domain_error(ss.str());
-    }
-    return matrix<2, 2>( mat[4], -mat[2],
-                        -mat[3],  mat[1])/det(mat);
-}
-
-/// \brief Computes the inverse of a 1x1 matrix.
-matrix<1, 1> inverse(const matrix<1, 1> &mat)
-{
-    if (!is_invertible(mat))
-    {
-        std::stringstream ss;
-        ss << "Cannot invert matrix " << mat
-            << ", which is singular";
-        throw std::domain_error(ss.str());
-    }
-    return matrix<1, 1>(1/mat[0]);
-}
-
 /// \brief Computes the cross product of 2 3D column vectors.
 column_vector<3> cross_product(const column_vector<3> &left,
                                const column_vector<3> &right)

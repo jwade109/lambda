@@ -187,20 +187,11 @@ TEST_CASE("Complex matrix.", "[matrix]")
     // std::cout << lambda::pretty(wiki) << std::endl
     //     << lambda::pretty(lambda::conjugate_transpose(wiki)) << std::endl;
 
-    lambda::complex_matrix<2, 2> m(4, 2, 3, -1);
+    lambda::complex_matrix<2, 2> m(0.397218, 0.865379, 0.785604, 0.396751);
 
-    for (std::complex<double>& e : lambda::roots(lambda::characteristic_polynomial(m)))
-    {
-        std::cout << e << std::endl;
-        auto B = e*lambda::identity<2, 2, std::complex<double>>() - m;
-        auto zero_vector = lambda::column_vector<2, std::complex<double>>();
-        auto augmented = lambda::augment(B, zero_vector);
-        auto sol = lambda::rref(augmented);
-        lambda::column_vector<2, std::complex<double>> eigenvector;
-        eigenvector[0] = sol(0, 1);
-        eigenvector[1] = -sol(0, 0);
-        std::cout << eigenvector << std::endl;
-    }
+    auto system = lambda::eigensystem(m);
+    std::cout << lambda::pretty(std::get<0>(system)) << std::endl;
+    std::cout << lambda::pretty(std::get<1>(system)) << std::endl;
 }
 
 TEST_CASE("Dicking around.", "[matrix]")

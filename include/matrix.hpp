@@ -32,11 +32,11 @@ template <size_t M, size_t N, typename R = double> class matrix
     static_assert(M > 0 && N > 0,
         "Cannot create matrix of dimension 0");
 
+    public:
+
     const size_t rows = M;
     const size_t columns = N;
     using representation = R;
-
-    public:
 
     /// \brief Default constructor.
     matrix() : _data() { }
@@ -278,8 +278,7 @@ matrix<M, N, R> operator * (const matrix<M, N, R> &m, T scalar)
 
 /// \brief Multiplication of a matrix by a scalar.
 template <size_t M, size_t N, typename R, class T>
-auto operator * (T scalar, const matrix<M, N, R> &m)
-    -> matrix<M, N, decltype(T()*R())>
+matrix<M, N, decltype(T()*R())> operator * (T scalar, const matrix<M, N, R> &m)
 {
     return m*scalar;
 }
@@ -293,9 +292,8 @@ matrix<M, N> operator / (const matrix<M, N, R> &m, T divisor)
 
 /// \brief Addition of two matrices.
 template <size_t M, size_t N, typename R1, typename R2>
-auto operator + (const matrix<M, N, R1> &left,
-                 const matrix<M, N, R2> &right)
-    -> matrix<M, N, decltype(R1() + R2())>
+matrix<M, N, decltype(R1() + R2())> operator + (const matrix<M, N, R1> &left,
+                                                const matrix<M, N, R2> &right)
 {
     matrix<M, N, decltype(R1() + R2())> ret;
     for (size_t i = 0; i < M; ++i)
@@ -310,9 +308,8 @@ auto operator + (const matrix<M, N, R1> &left,
 
 /// \brief Subtraction of two matrices.
 template <size_t M, size_t N, typename R1, typename R2>
-auto operator - (const matrix<M, N, R1> &left,
-                 const matrix<M, N, R2> &right)
-    -> matrix<M, N, decltype(R1() - R2())>
+matrix<M, N, decltype(R1() - R2())> operator - (const matrix<M, N, R1> &left,
+                                                const matrix<M, N, R2> &right)
 {
     matrix<M, N, decltype(R1() - R2())> ret;
     for (size_t i = 0; i < M; ++i)
@@ -327,9 +324,8 @@ auto operator - (const matrix<M, N, R1> &left,
 
 /// \brief Multiplication of two matrices.
 template <size_t M, size_t N, size_t P, typename R1, typename R2>
-auto operator * (const matrix<M, N, R1> &left,
-                 const matrix<N, P, R2> &right)
-    -> matrix<M, P, decltype(R1()*R2())>
+matrix<M, P, decltype(R1()*R2())> operator * (const matrix<M, N, R1> &left,
+                                              const matrix<N, P, R2> &right)
 {
     matrix<M, P, decltype(R1()*R2())> ret;
     for (size_t i = 0; i < M; ++i)
@@ -374,7 +370,7 @@ complex_matrix<N, M, R> conjugate_transpose(const complex_matrix<M, N, R> &m)
 /// \brief Augment a matrix with another matrix.
 template <size_t M, size_t N, size_t P, typename R>
 matrix<M, N + P, R> augment(const matrix<M, N, R> &A,
-                         const matrix<M, P, R> &x)
+                            const matrix<M, P, R> &x)
 {
     matrix<M, N + P, R> ret;
     for (size_t r = 0; r < M; ++r)
@@ -451,10 +447,33 @@ bool is_unitary(const matrix<N, N, R> &m)
 }
 
 /// \brief Compute the inverse of a square matrix.
-matrix<2, 2> inverse(const matrix<2, 2> &mat);
+template <typename R>
+matrix<2, 2, R> inverse(const matrix<2, 2, R> &mat)
+{
+    if (!is_invertible(mat))
+    {
+        std::stringstream ss;
+        ss << "Cannot invert matrix " << mat
+            << ", which is singular";
+        throw std::domain_error(ss.str());
+    }
+    return matrix<2, 2, R>( mat[4], -mat[2],
+                           -mat[3],  mat[1])/det(mat);
+}
 
 /// \brief Compute the inverse of a square matrix.
-matrix<1, 1> inverse(const matrix<1, 1> &mat);
+template <typename R>
+matrix<1, 1, R> inverse(const matrix<1, 1, R> &mat)
+{
+    if (!is_invertible(mat))
+    {
+        std::stringstream ss;
+        ss << "Cannot invert matrix " << mat
+            << ", which is singular";
+        throw std::domain_error(ss.str());
+    }
+    return matrix<1, 1, R>(1.0/mat[0]);
+}
 
 /// \brief Compute the inner product of two matrices.
 template <size_t M, size_t N, typename R>

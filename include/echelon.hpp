@@ -1,10 +1,11 @@
 #ifndef LAMBDA_ECHELON_HPP
 #define LAMBDA_ECHELON_HPP
 
+#include <matrix.hpp>
+
 #include <sstream>
 #include <algorithm>
-
-#include <matrix.hpp>
+#include <tuple>
 
 /*!
     \file
@@ -195,7 +196,8 @@ std::array<R, 3> characteristic_polynomial(const matrix<2, 2, R> &m)
 }
 
 template <typename R>
-std::array<std::complex<R>, 2> roots(const std::array<std::complex<R>, 3> &coefficients)
+lambda::column_vector<2, std::complex<R>>
+roots(const std::array<std::complex<R>, 3> &coefficients)
 {
     auto a = std::complex<double>(coefficients[2]);
     auto b = std::complex<double>(coefficients[1]);
@@ -204,7 +206,34 @@ std::array<std::complex<R>, 2> roots(const std::array<std::complex<R>, 3> &coeff
     auto disc = std::pow(b, 2) - 4.0*a*c;
     auto r1 = (-b + std::sqrt(disc))/(2.0*a);
     auto r2 = (-b - std::sqrt(disc))/(2.0*a);
-    return { r1, r2 };
+    return lambda::column_vector<2, std::complex<R>>(r1, r2);
+}
+
+template <size_t N, typename R>
+std::tuple<lambda::column_vector<N, std::complex<double>>,
+           lambda::matrix<N, N, std::complex<double>>>
+eigensystem(const matrix<N, N, R> &m)
+{
+    auto polynomial = characteristic_polynomial(m);
+    auto eigenvalues = roots(polynomial);
+    auto zero_vector = lambda::column_vector<2, std::complex<double>>();
+    matrix<N, N, std::complex<double>> eigenvectors;
+    for (size_t i = 0; i < N; ++i)
+    {
+        const auto &e = eigenvalues[i];
+        auto B = e*lambda::identity<2, 2, std::complex<double>>() - m;
+        auto augmented = lambda::augment(B, zero_vector);
+        auto sol = lambda::rref(augmented);
+        lambda::column_vector<2, std::complex<double>> eigenvector;
+
+        std::cout << lambda::pretty(augmented) << std::endl;
+        std::cout << lambda::pretty(sol) << std::endl;
+
+        eigenvectors(0, i) = sol(0, 1);
+        eigenvectors(1, i) = -sol(0, 0);
+
+    }
+    return std::make_tuple(eigenvalues, eigenvectors);
 }
 
 } // namespace lambda
