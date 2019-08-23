@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <complex>
 
 /*!
     \file
@@ -130,6 +131,12 @@ template <size_t M, size_t N, typename R = double> class matrix
         return _data;
     }
 
+    /// \brief Get a ref to the underlying data of this matrix.
+    std::array<R, M*N>& data()
+    {
+        return _data;
+    }
+
     private:
 
     /// \brief Matrix elements stored here.
@@ -160,6 +167,8 @@ template <size_t M, size_t N, typename R = double> class matrix
     }
 };
 
+
+
 template <size_t M, size_t N>
 bool operator == (const matrix<M, N> &left, const matrix<M, N> &right)
 {
@@ -179,6 +188,9 @@ using row_vector = matrix<1, N, R>;
 /// \brief Convenience typedef; default vectors are column vectors.
 template <size_t N, typename R = double>
 using vector = column_vector<N, R>;
+template <size_t M, size_t N, typename R = double>
+using complex_matrix = lambda::matrix<M, N, std::complex<R>>;
+
 
 /// \brief X basis vector.
 const static column_vector<3> unitx(1, 0, 0);
@@ -253,7 +265,7 @@ std::string pretty(const matrix<M, N, R> &m)
 template <size_t M, size_t N, typename R, class T>
 matrix<M, N, R> operator * (const matrix<M, N, R> &m, T scalar)
 {
-    auto ret = m;
+    matrix<M, N, R> ret = m;
     for (size_t i = 0; i < M; ++i)
     {
         for (size_t j = 0; j < N; ++j)
@@ -266,7 +278,8 @@ matrix<M, N, R> operator * (const matrix<M, N, R> &m, T scalar)
 
 /// \brief Multiplication of a matrix by a scalar.
 template <size_t M, size_t N, typename R, class T>
-matrix<M, N> operator * (T scalar, const matrix<M, N, R> &m)
+auto operator * (T scalar, const matrix<M, N, R> &m)
+    -> matrix<M, N, decltype(T()*R())>
 {
     return m*scalar;
 }
@@ -282,14 +295,31 @@ matrix<M, N> operator / (const matrix<M, N, R> &m, T divisor)
 template <size_t M, size_t N, typename R1, typename R2>
 auto operator + (const matrix<M, N, R1> &left,
                  const matrix<M, N, R2> &right)
-    -> matrix<M, N, decltype(R1()*R2())>
+    -> matrix<M, N, decltype(R1() + R2())>
 {
-    matrix<M, N, decltype(R1()*R2())> ret;
+    matrix<M, N, decltype(R1() + R2())> ret;
     for (size_t i = 0; i < M; ++i)
     {
         for (size_t j = 0; j < N; ++j)
         {
             ret(i, j) = left(i, j) + right(i, j);
+        }
+    }
+    return ret;
+}
+
+/// \brief Subtraction of two matrices.
+template <size_t M, size_t N, typename R1, typename R2>
+auto operator - (const matrix<M, N, R1> &left,
+                 const matrix<M, N, R2> &right)
+    -> matrix<M, N, decltype(R1() - R2())>
+{
+    matrix<M, N, decltype(R1() - R2())> ret;
+    for (size_t i = 0; i < M; ++i)
+    {
+        for (size_t j = 0; j < N; ++j)
+        {
+            ret(i, j) = left(i, j) - right(i, j);
         }
     }
     return ret;
@@ -332,6 +362,15 @@ matrix<N, M, R> transpose(const matrix<M, N, R> &m)
     return ret;
 }
 
+/// \brief Compute the hermitian, or conjugate, transpose of a matrix.
+template <size_t M, size_t N, typename R>
+complex_matrix<N, M, R> conjugate_transpose(const complex_matrix<M, N, R> &m)
+{
+    auto tr = transpose(m);
+    for (auto& z : tr.data()) z = std::conj(z);
+    return tr;
+}
+
 /// \brief Augment a matrix with another matrix.
 template <size_t M, size_t N, size_t P, typename R>
 matrix<M, N + P, R> augment(const matrix<M, N, R> &A,
@@ -352,12 +391,12 @@ matrix<M, N + P, R> augment(const matrix<M, N, R> &A,
 
 /// \brief Compute the determinant of a square matrix.
 template <size_t N, typename R>
-double det(const matrix<N, N, R> &m)
+R det(const matrix<N, N, R> &m)
 {
-    double sum = 0;
+    R sum = 0;
     for (size_t i = 0; i < N; ++i)
     {
-        double top = m(0, i);
+        R top = m(0, i);
         matrix<N-1, N-1, R> sub;
 
         for (size_t r = 1; r < N; ++r)
@@ -370,22 +409,28 @@ double det(const matrix<N, N, R> &m)
             }
         }
 
-        double d = det(sub);
-        sum += (top*d * (i % 2 == 0 ? 1 : -1));
+        R d = det(sub);
+        sum += (top*d * (i % 2 == 0 ? 1.0 : -1.0));
     }
     return sum;
 }
 
 /// \brief Compute the determinant of a 2x2 matrix.
-double det(const matrix<2, 2> &m);
+template <typename R> R det(const matrix<2, 2, R> &m)
+{
+    return m(0,0)*m(1,1) - m(0,1)*m(1,0);
+}
 
 /// \brief Compute the determinant of a 1x1 matrix.
-double det(const matrix<1, 1> &m);
+template <typename R> R det(const matrix<1, 1, R> &m)
+{
+    return m(0,0);
+}
 
 /// \brief Compute the trace of a square matrix.
-template <size_t N> double trace(const matrix<N, N> &m)
+template <size_t N, typename R> R trace(const matrix<N, N, R> &m)
 {
-    double sum = 0;
+    R sum = 0;
     for (size_t i = 0; i < N; ++i)
     {
         sum += m(i, i);

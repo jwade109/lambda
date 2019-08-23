@@ -17,7 +17,6 @@ add_library(lambda
     src/axis_angle.cpp
     src/complex.cpp
     src/dynamic_matrix.cpp
-    src/echelon.cpp
     src/levenshtein.cpp
     src/matrix.cpp
     src/quaternion.cpp

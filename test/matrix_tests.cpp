@@ -175,13 +175,35 @@ TEST_CASE("Test skew-symmetric matrix.", "[matrix]")
     REQUIRE( skew == expected );
 }
 
-template <size_t M, size_t N>
-using complex_matrix = lambda::matrix<M, N, std::complex<double>>;
-
 TEST_CASE("Complex matrix.", "[matrix]")
 {
-    complex_matrix<2, 2> cm(3 + 4i, 4, 2, -4i);
+    // lambda::complex_matrix<2, 2> cm(3 + 4i, 4, 2, -4i);
+    //
+    // std::cout << lambda::pretty(cm) << std::endl;
+    // std::cout << lambda::pretty(cm*cm) << std::endl;
+    //
+    // lambda::complex_matrix<2, 3> wiki(1,   -2-1i, 5,
+    //                                   1+1i, 1i,   4-2i);
+    // std::cout << lambda::pretty(wiki) << std::endl
+    //     << lambda::pretty(lambda::conjugate_transpose(wiki)) << std::endl;
 
-    std::cout << lambda::pretty(cm) << std::endl;
-    std::cout << lambda::pretty(cm*cm) << std::endl;
+    lambda::complex_matrix<2, 2> m(4, 2, 3, -1);
+
+    for (std::complex<double>& e : lambda::roots(lambda::characteristic_polynomial(m)))
+    {
+        std::cout << e << std::endl;
+        auto B = e*lambda::identity<2, 2, std::complex<double>>() - m;
+        auto zero_vector = lambda::column_vector<2, std::complex<double>>();
+        auto augmented = lambda::augment(B, zero_vector);
+        auto sol = lambda::rref(augmented);
+        lambda::column_vector<2, std::complex<double>> eigenvector;
+        eigenvector[0] = sol(0, 1);
+        eigenvector[1] = -sol(0, 0);
+        std::cout << eigenvector << std::endl;
+    }
+}
+
+TEST_CASE("Dicking around.", "[matrix]")
+{
+
 }

@@ -23,18 +23,6 @@ template <> matrix<3, 3>::matrix(const quaternion &q)
 template <> matrix<3, 3>::matrix(const axis_angle &aa)
     : _data({0, 0, 0, 0, 0, 0, 0, 0, 0}) { }
 
-/// \brief Computes the determinant of a 2x2 matrix.
-double det(const matrix<2, 2> &m)
-{
-    return m(0,0)*m(1,1) - m(0,1)*m(1,0); 
-}
-
-/// \brief Computes the determinant of a 1x1 matrix.
-double det(const matrix<1, 1> &m)
-{
-    return m(0,0);
-}
-
 /// \brief Computes the inverse of a 2x2 matrix.
 matrix<2, 2> inverse(const matrix<2, 2> &mat)
 {

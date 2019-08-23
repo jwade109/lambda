@@ -6,7 +6,7 @@
 
 #include <matrix.hpp>
 
-/*! 
+/*!
     \file
     \brief Implements RREF matrix reduction, as well as
            some convenient matrix manipulation operations.
@@ -16,8 +16,8 @@ namespace lambda
 {
 
 /// \brief Swap two rows in a matrix.
-template <size_t M, size_t N>
-matrix<M, N> swap_rows(const matrix<M, N> &m, size_t r1, size_t r2)
+template <size_t M, size_t N, typename R>
+matrix<M, N, R> swap_rows(const matrix<M, N, R> &m, size_t r1, size_t r2)
 {
     if (r1 >= M)
     {
@@ -43,8 +43,8 @@ matrix<M, N> swap_rows(const matrix<M, N> &m, size_t r1, size_t r2)
 }
 
 /// \brief Swap two columns in a matrix.
-template <size_t M, size_t N>
-matrix<M, N> swap_cols(const matrix<M, N> &m, size_t c1, size_t c2)
+template <size_t M, size_t N, typename R>
+matrix<M, N, R> swap_cols(const matrix<M, N, R> &m, size_t c1, size_t c2)
 {
     if (c1 >= M)
     {
@@ -70,15 +70,15 @@ matrix<M, N> swap_cols(const matrix<M, N> &m, size_t c1, size_t c2)
 }
 
 /// \brief Get the RREF form of a matrix.
-template <size_t M, size_t N>
-matrix<M, N> rref(const matrix<M, N> &m)
+template <size_t M, size_t N, typename R>
+matrix<M, N, R> rref(const matrix<M, N, R> &m)
 {
     auto ret = m;
     size_t lead = 0;
     for (size_t r = 0; r < M; ++r)
     {
         size_t i = r;
-        while (ret(i, lead) == 0)
+        while (ret(i, lead) == R(0))
         {
             ++i;
             if (M == i)
@@ -92,7 +92,7 @@ matrix<M, N> rref(const matrix<M, N> &m)
             }
         }
         swap_rows(ret, i, r);
-        if (ret(r, lead) != 0)
+        if (ret(r, lead) != R(0))
         {
             auto div = ret(r, lead);
             for (size_t k = 0; k < N; ++k)
@@ -117,11 +117,15 @@ matrix<M, N> rref(const matrix<M, N> &m)
 }
 
 /// \brief Get the RREF of a 1x1 matrix.
-matrix<1, 1> rref(const matrix<1, 1> &m);
+template <typename R>
+matrix<1, 1, R> rref(const matrix<1, 1, R> &m)
+{
+    return m;
+}
 
 /// \brief Compute the inverse of a square matrix.
-template <size_t N>
-matrix<N, N> inverse(const matrix<N, N> &mat)
+template <size_t N, typename R>
+matrix<N, N, R> inverse(const matrix<N, N, R> &mat)
 {
     if (!is_invertible(mat))
     {
@@ -140,6 +144,67 @@ matrix<N, N> inverse(const matrix<N, N> &mat)
         }
     }
     return inv;
+}
+
+/// \brief Returns the matrix produced by excluding row i, column j
+/// from the given matrix.
+template <size_t M, size_t N, typename R>
+matrix<M-1, N-1, R> submatrix(const matrix<M, N, R> &m, size_t i, size_t j)
+{
+    matrix<M-1, N-1, R> ret;
+    for (size_t r = 0; r < M-1; ++r)
+    {
+        for (size_t c = 0; c < N-1; ++c)
+        {
+            size_t get_row = r < i ? r : r + 1;
+            size_t get_col = c < j ? c : c + 1;
+            ret.at(r, c) = m.at(get_row, get_col);
+        }
+    }
+    return ret;
+}
+
+/// \brief Gets the cofactor expansion at a given index in a matrix.
+template <size_t M, size_t N, typename R>
+R cofactor_expansion(const matrix<M, N, R> &m, size_t i, size_t j)
+{
+    return det(submatrix(m, i, j));
+}
+
+template <typename R>
+std::array<R, 4> characteristic_polynomial(const matrix<3, 3, R> &m)
+{
+    std::array<R, 4> coefficients;
+    coefficients[0] = det(m);
+    coefficients[1] = cofactor_expansion(m, 0, 0) +
+                      cofactor_expansion(m, 1, 1) +
+                      cofactor_expansion(m, 2, 2);
+    coefficients[2] = -trace(m);
+    coefficients[3] = 1;
+    return coefficients;
+}
+
+template <typename R>
+std::array<R, 3> characteristic_polynomial(const matrix<2, 2, R> &m)
+{
+    std::array<R, 3> coefficients;
+    coefficients[0] = det(m);
+    coefficients[1] = -trace(m);
+    coefficients[2] = 1;
+    return coefficients;
+}
+
+template <typename R>
+std::array<std::complex<R>, 2> roots(const std::array<std::complex<R>, 3> &coefficients)
+{
+    auto a = std::complex<double>(coefficients[2]);
+    auto b = std::complex<double>(coefficients[1]);
+    auto c = std::complex<double>(coefficients[0]);
+
+    auto disc = std::pow(b, 2) - 4.0*a*c;
+    auto r1 = (-b + std::sqrt(disc))/(2.0*a);
+    auto r2 = (-b - std::sqrt(disc))/(2.0*a);
+    return { r1, r2 };
 }
 
 } // namespace lambda
