@@ -1,0 +1,57 @@
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+
+cc_library(
+    name = "lambda",
+    srcs = [
+        "src/axis_angle.cpp",
+        "src/complex.cpp",
+        "src/crc.cpp",
+        "src/dynamic_matrix.cpp",
+        "src/echelon.cpp",
+        "src/elementary_automata.cpp",
+        "src/levenshtein.cpp",
+        "src/matrix.cpp",
+        "src/quaternion.cpp",
+        "src/solve.cpp",
+        "src/units.cpp",
+    ],
+    hdrs = [
+        "include/lambda/axis_angle.hpp",
+        "include/lambda/complex.hpp",
+        "include/lambda/crc.hpp",
+        "include/lambda/decomposition.hpp",
+        "include/lambda/dynamic_matrix.hpp",
+        "include/lambda/echelon.hpp",
+        "include/lambda/elementary_automata.hpp",
+        "include/lambda/kalman_filter.hpp",
+        "include/lambda/levenshtein.hpp",
+        "include/lambda/matrix.hpp",
+        "include/lambda/norm.hpp",
+        "include/lambda/quaternion.hpp",
+        "include/lambda/solve.hpp",
+        "include/lambda/units.hpp",
+        "include/lambda/lambda.hpp",
+    ],
+    strip_include_prefix = "include",
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "tests",
+    srcs = [
+        "test/automata_tests.cpp",
+        "test/catch_main.cpp",
+        "test/complex_tests.cpp",
+        "test/decomposition_tests.cpp",
+        "test/dynamic_matrix_tests.cpp",
+        "test/kalman_tests.cpp",
+        "test/levenshtein_tests.cpp",
+        "test/matrix_tests.cpp",
+        "test/solve_tests.cpp",
+        "test/units_tests.cpp",
+    ],
+    deps = [
+        ":lambda",
+        "@catch2"
+    ],
+)
