@@ -3,4 +3,4 @@ build/
 html/
 latex/
 bazel-*
-
+MODULE.bazel.lock

@@ -52,6 +52,7 @@ cc_test(
     ],
     deps = [
         ":lambda",
-        "@catch2"
+        "@catch2",
+        "@eigen",
     ],
 )

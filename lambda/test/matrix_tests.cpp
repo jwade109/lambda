@@ -1,6 +1,8 @@
 #include <catch2/catch.hpp>
 #include <lambda/lambda.hpp>
 
+#include <eigen3/Eigen/Core>
+
 TEST_CASE("Quaternion to rotation matrix.", "[matrix]")
 {
     lambda::quaternion q(0.5080005, 0.3810004, 0.1270001, 0.7620008);
