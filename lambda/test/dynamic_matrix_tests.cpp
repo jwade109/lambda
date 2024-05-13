@@ -49,7 +49,7 @@ TEST_CASE("Dynamic matrix construction.", "[dynamic-matrix]")
 
 TEST_CASE("Dynamic matrix arithmetic.", "[dynamic-matrix]")
 {
-    auto m = lambda::dunitx*3 + lambda::dunitz + 2*lambda::dunity;
+    auto m = lambda::dunitx() * 3 + lambda::dunitz() + 2 * lambda::dunity();
 
     REQUIRE( m == lambda::dynamic_matrix(3, 1, {3, 2, 1}) );
 }

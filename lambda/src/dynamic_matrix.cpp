@@ -145,6 +145,27 @@ bool operator == (const dynamic_matrix &left,
     return true;
 }
 
+/// \brief X basis vector.
+const dynamic_matrix dunitx()
+{
+    static dynamic_matrix ret(3, 1, {1, 0, 0});
+    return ret;
+}
+
+/// \brief Y basis vector.
+const dynamic_matrix dunity()
+{
+    static dynamic_matrix ret(3, 1, {0, 1, 0});
+    return ret;
+}
+
+/// \brief Z basis vector.
+const dynamic_matrix dunitz()
+{
+    static dynamic_matrix ret(3, 1, {0, 0, 1});
+    return ret;
+}
+
 /// \brief Print a matrix to a std::ostream.
 std::ostream& operator << (std::ostream &os, const dynamic_matrix &m)
 {

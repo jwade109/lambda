@@ -1,4 +1,6 @@
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_pkg//pkg:deb.bzl", "pkg_deb")
 
 cc_library(
     name = "lambda",
@@ -55,4 +57,55 @@ cc_test(
         "@catch2",
         "@eigen",
     ],
+)
+
+filegroup(
+    name = "headers",
+    srcs = glob([
+        "include/lambda/*.hpp",
+    ]),
+)
+
+cc_binary(
+    name = "main",
+    srcs = ["src/main.cpp"],
+    deps = [
+        ":lambda",
+    ],
+)
+
+pkg_tar(
+    name = "tar-bin",
+    files = {
+        ":main": "/usr/local/bin/lambda"
+    }
+)
+
+pkg_tar(
+    name = "tar-library",
+    srcs = [":lambda"],
+    package_dir = "/usr/lib/lambda/",
+)
+
+pkg_tar(
+    name = "tar-headers",
+    srcs = [":headers"],
+    package_dir = "/opt/lambda/include/lambda",
+)
+
+pkg_tar(
+    name = "tar-package",
+    deps = [":tar-bin", ":tar-library", ":tar-headers"],
+)
+
+pkg_deb(
+    name = "liblambda-deb",
+    architecture = "amd64",
+    data = ":tar-package",
+    depends = [],
+    homepage = "https://github.com/jwade109",
+    maintainer = "Wade Foster <jwade109@vt.edu>",
+    package = "liblambda",
+    version = "0.0.1",
+    description = "Description Title\nDescription content",
 )

@@ -102,11 +102,13 @@ bool operator == (const dynamic_matrix &left,
                   const dynamic_matrix &right);
 
 /// \brief X basis vector.
-const static dynamic_matrix dunitx(3, 1, {1, 0, 0});
+const dynamic_matrix dunitx();
+
 /// \brief Y basis vector.
-const static dynamic_matrix dunity(3, 1, {0, 1, 0});
+const dynamic_matrix dunity();
+
 /// \brief Z basis vector.
-const static dynamic_matrix dunitz(3, 1, {0, 0, 1});
+const dynamic_matrix dunitz();
 
 /// \brief Print a matrix to a std::ostream.
 std::ostream& operator << (std::ostream &os, const dynamic_matrix &m);

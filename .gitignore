@@ -4,3 +4,6 @@ html/
 latex/
 bazel-*
 MODULE.bazel.lock
+.vscode/
+install_test/a.out
+
