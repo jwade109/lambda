@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 #include <lambda/lambda.hpp>
 
-#include <eigen3/Eigen/Core>
+#include <Eigen/Core>
 
 TEST_CASE("Quaternion to rotation matrix.", "[matrix]")
 {

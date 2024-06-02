@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 #include <lambda/lambda.hpp>
 
-#include <eigen3/Eigen/Core>
+#include <Eigen/Core>
 
 #if 0
 TEST_CASE("Singular value decomposition.", "[decomposition]")
